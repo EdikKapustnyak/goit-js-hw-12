@@ -32,8 +32,9 @@ async function handleFormSubmit(event) {
 
     currentQuery = getInputValue;
     currentPage = 1;
-    gallery.innerHTML = ''; 
+    gallery.innerHTML = '';
     loadMoreBtn.classList.add('visually-hidden');
+
     loader.classList.remove('visually-hidden');
 
     try {
@@ -64,14 +65,14 @@ async function handleFormSubmit(event) {
 }
 
 async function handleLoadMore() {
-    currentPage += 1; 
+    currentPage += 1;
     loader.classList.remove('visually-hidden');
 
     try {
         const response = await getRequest(currentQuery, currentPage);
         renderGallery(response.data.hits);
 
-        const totalLoadedImages = currentPage * 15; 
+        const totalLoadedImages = currentPage * 15;
         if (totalLoadedImages >= totalHits) {
             loadMoreBtn.classList.add('visually-hidden');
             iziToast.show({
@@ -79,6 +80,8 @@ async function handleLoadMore() {
                 message: "We're sorry, but you've reached the end of search results."
             });
         }
+
+        smoothScroll();
     } catch (error) {
         console.error(error);
         iziToast.show({
@@ -87,5 +90,16 @@ async function handleLoadMore() {
         });
     } finally {
         loader.classList.add('visually-hidden');
+    }
+}
+
+function smoothScroll() {
+    const galleryItem = document.querySelector('.gallery-item');
+    if (galleryItem) {
+        const { height } = galleryItem.getBoundingClientRect();
+        window.scrollBy({
+            top: height * 2,
+            behavior: 'smooth',
+        });
     }
 }
