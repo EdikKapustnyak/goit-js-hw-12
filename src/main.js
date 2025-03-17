@@ -1,7 +1,7 @@
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
 import { getRequest } from "./js/pixabay-api";
-import { renderGallery } from "./js/render-functions";
+import { renderGallery, clearGallery } from "./js/render-function";
 
 const form = document.querySelector('.form');
 const loader = document.querySelector('.loader');
@@ -32,7 +32,7 @@ async function handleFormSubmit(event) {
 
     currentQuery = getInputValue;
     currentPage = 1;
-    gallery.innerHTML = '';
+    clearGallery(); // Очистити галерею
     loadMoreBtn.classList.add('visually-hidden');
 
     loader.classList.remove('visually-hidden');
